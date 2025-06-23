@@ -1,0 +1,69 @@
+resources:
+  pipelines:
+    pipeline_302678df_ca3e_49b2_9224_f9867bb83c27:
+      name: 302678df-ca3e-49b2-9224-f9867bb83c27
+      configuration:
+        pipelines.numUpdateRetryAttempts: "5"
+        pipelines.isDefaultStorage: "true"
+      managed_definition:
+        brickindex:
+          continuous: false
+          sink_spec:
+            src_table: genai.default.pdf_chunks_embedded
+            dest_index: index-e1252b3c-f31a-42b2-ac98-44296e97ea01
+            primary_keys:
+              - chunk_id
+            vector_indexes:
+              - column: embedding
+                dimension: 1024
+                ann_algorithm: hnsw
+                ann_similarity_metric: l2
+                ann_engine: faiss
+                embedding_model_endpoint_type: MODELS
+                scalar_quantization: fp16
+                embedding_model_provider_name: Unknown
+            online_catalog_url: :0
+            jwt: ""
+            cluster_settings:
+              replicas: 0
+              shards: 1
+              refresh_interval: 30s
+              embedding_generation_batch_size: 10
+              max_time_per_embedding_batch: 5000
+              max_index_column_bytes: 32764
+              max_shards: 80
+              ideal_knn_memory_size_per_shard: 7040000000
+              reserved_index_growth_factor: 2
+              min_ingestion_batch_size: 100
+              max_ingestion_batch_size: 250
+              max_ingestion_concurrency: 40
+            endpoint_name: genai_vec_search_shankho
+            use_brickindex_gateway: true
+            enable_dlt_model_serving_requests_via_brickindex_gateway: true
+            enable_additional_ingestion_metrics: true
+            enable_waiting_for_capacity_fulfillment: true
+            enable_over_provision_initial_shard_count: true
+            enable_rejecting_over_capacity_writes: true
+            capacity_fulfillment_polling_interval: 60000
+            capacity_fulfillment_max_wait_time: 3600000
+            capacity_fulfillment_initial_write_max_wait_time: 86400000
+            enable_dlt_concurrency: true
+            embedding_writeback_table: opt_out
+            embedding_writeback_max_concurrency: 1
+            columns_to_sync:
+              - chunk_id
+              - source
+              - content
+              - embedding
+            auto_scale_v2_capacity_fulfillment_config:
+              polling_interval: 180000
+              initial_write_max_waitTime: 25200000
+              max_wait_time: 3600000
+            endpoint_id: c2fd3fc9-2ab7-4ba0-a25c-785789c34d20
+            embedding_writeback_max_queue_size: 100
+      target: default
+      continuous: false
+      photon: true
+      edition: CORE
+      catalog: genai
+      serverless: true
